@@ -127,10 +127,37 @@ def remove_student():
     # Create variables for the id entry
     id_var = tk.StringVar()
 
-    #this is called when the remove student button is clicked
+    # This function is called when the remove student button is clicked
     def remove_from_database():
+        global student_info  # Assuming student_info is a global variable
 
-        id_value =  id_var.get()
+        id_value = id_var.get()
+
+        confirmation = False
+
+    # Check if the student with the specified ID exists
+        if any(student[0] == str(id_value) for student in load_student_data("student-info.csv")):
+
+        # Confirm that you want to delete
+            confirmation = messagebox.askyesno("Confirm Removal", "Are you sure you want to delete this student")
+
+        if confirmation:
+            # Remove the student with the specified ID
+            student_info = [student for student in student_info if student[0] != str(id_value)]
+
+            # Call the write student function to update the file
+            write_to_file("student-info.csv", student_info, heading)
+
+            messagebox.showinfo("Success!", f"Student with ID {id_value} removed successfully.")
+        else:
+            messagebox.showwarning("Warning", f"Student with ID {id_value} not found.")
+    # Close the remove window
+        remove_window.destroy()
+
+        
+
+
+            # Get the index of the student to remove from the list and then remove it
 
     id_label = tk.Label(remove_frame, text="Student ID:")
     id_label.grid(row=0, column=0, pady=15)
@@ -138,7 +165,11 @@ def remove_student():
     id_entry.grid(row=0, column=1, pady=15)
 
 
+    remove_student_button = tk.Button(remove_frame, text="Remove Student", command=remove_from_database)
+    remove_student_button.grid(row=1, column=1, pady=10)
 
+    close_button = tk.Button(remove_frame, text="Close Window", command=remove_window.destroy)
+    close_button.grid(row=2, column=1, pady=30)
 
 
 student_info = load_student_data("student-info.csv")
