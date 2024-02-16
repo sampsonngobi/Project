@@ -1,58 +1,55 @@
-# imort neccessary  libraries - CSV and tkinter
 import csv
 import tkinter as tk
 from tkinter import messagebox
 
-
-#create a heading list
+# Create a heading list
 heading = ['ID', 'NAME', 'NUMBER OF CLASSES', "COST PER CLASS"]
 
-#create an empty list to store student infomation
+# Create an empty list to store student information
 student_info = []
 
-#this function adds student to the  student info list
-def add_student(student_info):
 
-    #create a second window to collect students info
+
+# Function to add a student to the student info list and write to file
+def add_student():
+    # Create a second window to collect student info
     add_window = tk.Toplevel()
     add_window.title("Add Student")
     add_window.geometry('600x400')
-    add_window.configure(bg = '#333333')
+    add_window.configure(bg='#333333')
 
-    #add a frame
-    add_frame = tk.Frame(add_window, bg= "#333333", height=150, width=700)
+    # Add a frame
+    add_frame = tk.Frame(add_window, bg="#333333", height=150, width=700)
     add_frame.pack(pady=20, padx=50)
 
-
-    #Create variables for each field in the form
+    # Create variables for each field in the form
     id_var = tk.StringVar()
     name_var = tk.StringVar()
     classes_var = tk.StringVar()
     cost_var = tk.StringVar()
 
-    #this function is called when the add button is  clicked
+    # This function is called when the add button is clicked
     def add_to_database():
-        #get input values
+        # Get input values
         id_value = int(id_var.get())
         name_value = name_var.get()
         num_classes = int(classes_var.get())
         cost = float(cost_var.get())
 
-        #check if student exits 
-        if any(student[0] == id_value for student in student_info):
-            messagebox.showwarning("Warning","Student ID already exists. Choose a new ID")
-        
+        # Check if student exists
+        if any(student[0] == str(id_value) for student in load_student_data("student-ifo.csv")):
+            messagebox.showwarning("Warning", "Student ID already exists. Choose a new ID")
         else:
-            #creat new student and append new student information to the database
+            # Create a new student and append new student information to the database
             new_student = [id_value, name_value, num_classes, cost]
             student_info.append(new_student)
 
-            #call the write student function
-            write_to_file("student-info.csv", student_info, heading= None)
+            # Call the write student function
+            write_to_file("student-info.csv", student_info, heading)
 
-            messagebox.showinfo("Success!","New student added successfully.")
+            messagebox.showinfo("Success!", "New student added successfully.")
 
-            #close the add window
+            # Close the add window
             add_window.destroy()
 
     id_label = tk.Label(add_frame, text="Student ID:")
@@ -75,57 +72,92 @@ def add_student(student_info):
     cost_entry = tk.Entry(add_frame, textvariable=cost_var)
     cost_entry.grid(row=3, column=1, pady=15)
 
-    add_student_button = tk.Button(add_frame, text='Add Student', command=lambda : add_to_database())
+    add_student_button = tk.Button(add_frame, text='Add Student', command=add_to_database)
     add_student_button.grid(row=4, column=1, pady=15)
 
 
+def load_student_data(filename):
 
-            
+    students = []
 
-#this function writes the new student to a csv file
-def write_to_file(filename, student_info, heading= None):
+    try:
+        with open("student-info.csv", "rt") as student_file:
 
-    #open a file
-    with open("student-info.csv", "wt", newline="") as student_file:
+            reader = csv.reader(student_file)
+
+            # Skip the heading row
+            next(reader, None)
+
+            #add  each row to the student list 
+            for row in reader:
+                students.append(row)
+
+    except FileNotFoundError:
+        messagebox.showwarning("Warning", f"File '{student_file}' not found.")
+    except  Exception as e:
+         messagebox.showerror("Error", f"An unexpected error occurred: {e}")
+    return students
         
-        #create a writer object
-        writer = csv.writer(student_file)
 
-        #write the heading row first (if there is one)
+
+# Function to write student information to a CSV file
+def write_to_file(filename, student_info, heading=None):
+
+    # Open a file for writing 
+    with open(filename, "wt", newline="") as student_file:
+        # Create a writer object
+        writer = csv.writer(student_file)
+        # Write the heading row first (if there is one)
         if heading is not None:
             writer.writerow(heading)
-            
-        for  student in student_info:
+        for student in student_info:
             writer.writerow(student)
 
+def remove_student():
+
+    remove_window = tk.Toplevel()
+    remove_window.title("Remove Student")
+    remove_window.geometry('600x400')
+    remove_window.configure(bg='#333333')
+
+    # Add a frame
+    remove_frame = tk.Frame(remove_window, bg="#333333", height=150, width=700)
+    remove_frame.pack(pady=20, padx=50)
+
+    # Create variables for the id entry
+    id_var = tk.StringVar()
+
+    #this is called when the remove student button is clicked
+    def remove_from_database():
+
+        id_value =  id_var.get()
+
+    id_label = tk.Label(remove_frame, text="Student ID:")
+    id_label.grid(row=0, column=0, pady=15)
+    id_entry = tk.Entry(remove_frame, textvariable=id_var)
+    id_entry.grid(row=0, column=1, pady=15)
 
 
 
-    
 
 
+student_info = load_student_data("student-info.csv")
 
-
-
-
-
-#create a window
-window =tk.Tk()
-window.title("Student Manger")
+# Create a window
+window = tk.Tk()
+window.title("Student Manager")
 window.geometry('600x400')
-window.configure(bg = '#333333')
+window.configure(bg='#333333')
 
-#add a frame on the window for responsiveness
-frame = tk.Frame(window, bg= "#333333", height=150, width=700)
+# Add a frame on the window for responsiveness
+frame = tk.Frame(window, bg="#333333", height=150, width=700)
 frame.pack(pady=20, padx=50)
 
-#Add and remove buttons link to functions 
-add_button_student = tk.Button(frame , text="Add Student", width=30, command=lambda: [add_student(student_info)])
-add_button_student.grid(row=1, column=1, pady= 40)
+# Add and remove buttons linked to functions
+add_button_student = tk.Button(frame, text="Add Student", width=30, command=add_student)
+add_button_student.grid(row=1, column=1, pady=40)
 
-remove_button_student = tk.Button(frame , text="Remove Student", width=30)
-remove_button_student.grid(row=2, column=1, pady= 40)
-
-
+remove_button_student = tk.Button(frame, text="Remove Student", width=30, command=remove_student)
+remove_button_student.grid(row=2, column=1, pady=40)
 
 window.mainloop()
