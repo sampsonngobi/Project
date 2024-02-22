@@ -1,0 +1,46 @@
+Second Report for a Student Chosen Project
+
+Do the following:
+
+1. In the table below, list the dates, amount of time spent, and
+description of the work that you did on your project. Follow the example
+that is in the first row of the table below. Include the time you spent
+doing any of the following:
+    a. discussing your project with your teacher, tutor, or fellow students
+    b. researching by reading articles and watching applicable videos
+    c. designing your project by drawing diagrams and other applicable documents
+    d. writing experimental code
+    d. writing code for your project
+    e. writing test functions
+    f. debugging your code
+    g. any other activity that helped you complete your project
+
+=============Example====================
+            Time Spent
+   Date       (hours)   Description of Work
+----------  ----------  -------------------------
+2021-12-03      2.5     Wrote two program functions and two test functions
+2021-12-03      .5      Watched video on 
+=============Example====================
+2024-20-02      1.19    Wrote a function that calculates the cost of classes per month.
+                        Watch video on displaying the result using tkinter
+
+2024-20-02      1.7     Started writing the update student function
+2024-21-02      2.20    I watched videos on how to implement the update function.
+                        It is working but doesn't retain other information  about the student when 
+                        I try to update only the name. I will learn more about this. 
+
+2024-21-02      1.00    I have been trying to fix the update function. 
+                        I also renamed the my program. It is now called
+                        "STUDENT MANAGER"
+2024-22-02      2.00    Studying on how to write my last function which is supposed to 
+                        schedule classes. I haven't figured it out yet. 
+
+2024-22-02      00.30   Meet with one of my team members to discuss and find test ideas for my code 
+
+2024-22-02      01.00   Wrote some test functions.
+
+
+2. In Canvas, submit this completed text file, your Python program, your
+Python test file, and any project data files such as .txt and .csv files and
+link to video walkthrough if needed.
